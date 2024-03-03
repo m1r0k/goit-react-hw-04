@@ -1,0 +1,10 @@
+.photolist>ul {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+img {
+    width: 280px;
+    height: 216px;
+    justify-content: center;
+}
