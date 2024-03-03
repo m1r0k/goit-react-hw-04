@@ -20,7 +20,9 @@ export default function PhotoList ({items}){
       <ul>
         {items.map((item) => (
           <li>
-            <PhotoCard />
+            <PhotoCard key={item.id}
+					  photo={item}
+					  onClick={isOpenModal}/>
           </li>
         ))}
       </ul>
