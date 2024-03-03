@@ -14,15 +14,12 @@ export default function PhotoList ({items}){
     SetSelectedPhoto(null);
   };
 
-
   return (
     <div className={css.photoList}>
       <ul>
         {items.map((item) => (
           <li>
-            <PhotoCard key={item.id}
-					  photo={item}
-					  onClick={isOpenModal}/>
+            <PhotoCard key={item.id} photo={item} onClick={isOpenModal}/>
           </li>
         ))}
       </ul>

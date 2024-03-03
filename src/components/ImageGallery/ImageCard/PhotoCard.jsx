@@ -1,9 +1,9 @@
 import css from "./PhotoCard.module.css";
 
-export default function PhotoCard ({item, onClick}) {
+export default function PhotoCard ({item}) {
     return (
-        <li key={item.id} onClick={onClick}>
+        <div className={css.img}>
             <img src={item.urls.small} alt={item.alt_description} />
-        </li>
+        </div>
     );
 };
