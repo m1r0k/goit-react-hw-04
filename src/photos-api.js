@@ -9,7 +9,7 @@ export const fetchPhotos = async (searchQuery, page=1) => {
         query: searchQuery,
         perPage: 12,
         page,
-        orientation: landscape,
+        orientation: 'landscape',
       },
       headers: {
         Authorization: "Client-ID XSwUV5fdSl6y8Yok4PJU2h2s2rTm_vyTQJwR4DAkyn4",
