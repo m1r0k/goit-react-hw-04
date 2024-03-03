@@ -6,7 +6,7 @@ import SearchBar from './SearchBar/SearchBar';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
 import toast, { Toaster } from 'react-hot-toast';
 import Loader from './Loader/Loader';
-import ModalWindow from './ImageModal/Modal';
+import ModalWindow from './ImageModal/ModalWindow';
 
 export default function App () {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,6 +14,7 @@ export default function App () {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   useEffect(() =>{
     if(searchQuery === '') {
@@ -28,6 +29,7 @@ export default function App () {
         setPhotos((prewPhotos) => {
           return page === 1 ? data : [...prewPhotos, ...data];
         });
+
       } catch (error) {
         setError(true);
       } finally {
@@ -47,19 +49,27 @@ export default function App () {
     setPage(page + 1);
   };
 
+  const isOpenModal = (item) => {
+    setSelectedPhoto(item);
+  };
+
+  const onCloseModal = () => {
+    setSelectedPhoto(null);
+  };
+
   return (
   <div className={css.container}>
     <SearchBar onSearch={handleSearch} />
     {error && <ErrorMessage message={'Oops! Error! Reload!'} />}
-    {photos.length > 0 && <PhotoList items={photos} />}
+    {photos.length > 0 && <PhotoList items={photos} isOpen={isOpenModal} />}
     {photos.length > 0 && !isLoading && 
     (<button onClick={handleLoadMore}>Load more</button>)}
     {isLoading && <Loader />}
-    {/* {selectedPhoto && <Modal 
-      isOpen={isOpenModal}  
-      photo={selectedPhoto}
-      onClose={onCloseModal} />} */}
-    <Toaster position='top-center'/>
+    {selectedPhoto && <ModalWindow 
+      // isOpen={true}  
+      item={selectedPhoto}
+      onClose={onCloseModal} />}
+    <Toaster position='top-right'/>
   </div>
   );
 }

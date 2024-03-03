@@ -9,9 +9,9 @@ export default function SearchBar({ onSearch }) {
       <Formik initialValues={{ query:'' }}
         validate={(values) =>{
           const errors = {};
-            if (!values.query.trim()) {
-              toast.error('Please enter a search query!');
-            }
+            // if (!values.query.trim()) {
+            //   toast.error('Please enter a search query!');
+            // };
               return errors;
         }}
           onSubmit={(values, actions) => {
