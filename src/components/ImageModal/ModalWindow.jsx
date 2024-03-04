@@ -1,15 +1,17 @@
 import ReactModal from 'react-modal';
 import css from './Modal.module.css';
 
-export default function ModalWindow ({ isOpenModal, item, onCloseModal }) {
+ReactModal.setAppElement('#root');
+
+export default function ModalWindow ({ isOpen, itemUrl, onCloseModal }) {
   return (
     <div className={css.modalOverlay} >
       <ReactModal 
         className={css.modal}
-        isOpen={isOpenModal}
+        isOpen={isOpen}
         onRequestClose={onCloseModal} 
         overlay={css.overlay} >
-        <img src={item.urls.regular} alt={item.alt_description} />
+        <img src={itemUrl} alt='Big photo' />
       </ReactModal>
     </div>
   );

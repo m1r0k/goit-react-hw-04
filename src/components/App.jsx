@@ -4,9 +4,12 @@ import PhotoList from './ImageGallery/PhotoList';
 import { fetchPhotos } from '../photos-api';
 import SearchBar from './SearchBar/SearchBar';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import Loader from './Loader/Loader';
 import ModalWindow from './ImageModal/ModalWindow';
+import ReactModal from 'react-modal';
+
+ReactModal.setAppElement('#root');
 
 export default function App () {
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,6 +18,7 @@ export default function App () {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   useEffect(() =>{
     if(searchQuery === '') {
@@ -29,7 +33,6 @@ export default function App () {
         setPhotos((prewPhotos) => {
           return page === 1 ? data : [...prewPhotos, ...data];
         });
-
       } catch (error) {
         setError(true);
       } finally {
@@ -49,25 +52,27 @@ export default function App () {
     setPage(page + 1);
   };
 
-  const isOpenModal = (item) => {
-    setSelectedPhoto(item);
+  const handlePhotoClick = (itemUrl) => {
+    setSelectedPhoto(itemUrl);
+    setIsOpenModal(true);
   };
 
   const onCloseModal = () => {
     setSelectedPhoto(null);
+    setIsOpenModal(false);
   };
 
   return (
   <div className={css.container}>
     <SearchBar onSearch={handleSearch} />
     {error && <ErrorMessage message={'Oops! Error! Reload!'} />}
-    {photos.length > 0 && <PhotoList items={photos} isOpen={isOpenModal} />}
+    {photos.length > 0 && <PhotoList items={photos} onPhotoClick={handlePhotoClick} />}
     {photos.length > 0 && !isLoading && 
     (<button onClick={handleLoadMore}>Load more</button>)}
     {isLoading && <Loader />}
     {selectedPhoto && <ModalWindow 
-      // isOpen={true}  
-      item={selectedPhoto}
+      isOpen={isOpenModal}  
+      itemUrl={selectedPhoto}
       onClose={onCloseModal} />}
     <Toaster position='top-right'/>
   </div>

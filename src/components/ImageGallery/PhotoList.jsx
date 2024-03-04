@@ -1,17 +1,17 @@
 import css from "./PhotoList.module.css";
 import PhotoCard from "./ImageCard/PhotoCard";
 
-export default function PhotoList ({items, isOpenModal}){
+export default function PhotoList ({ items, onPhotoClick }){
 
   return (
-    <div className={css.photoList}>
-      <ul>
-        {items.map((item) => (
-          <li key={item.id} onClick={() => isOpenModal(item)} >
-            <PhotoCard item={item} />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul className={css.photoList}>
+      {items.map((item) => (
+        <li key={item.id} >
+          <PhotoCard src={item.urls.small} 
+            alt={item.alt_description} 
+            onClick={() => onPhotoClick(item.urls.regular)}/>
+        </li>
+      ))}
+    </ul>
   );
 };
