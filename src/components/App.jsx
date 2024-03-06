@@ -20,6 +20,8 @@ export default function App () {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
+  // const [showBtn, setShowBtn] = useState(false);
+
   useEffect(() =>{
     if(searchQuery === '') {
       return;
@@ -30,6 +32,8 @@ export default function App () {
         setIsLoading(true);
         setError(false);
         const data = await fetchPhotos(searchQuery, page);
+        // setShowBtn(total_pages && total_pages !== page);
+
         setPhotos((prewPhotos) => {
           return page === 1 ? data : [...prewPhotos, ...data];
         });
@@ -68,7 +72,9 @@ export default function App () {
     {error && <ErrorMessage message={'Oops! Error! Reload!'} />}
     {photos.length > 0 && <PhotoList items={photos} onPhotoClick={handlePhotoClick} />}
     {photos.length > 0 && !isLoading && 
-    (<button onClick={handleLoadMore}>Load more</button>)}
+    (/*showBtn && */<button onClick={handleLoadMore}>Load more</button>)}
+    {/* {photos.length === 0 && <ErrorMessage message={'Nothing found! Try another query...'} />} */}
+
     {isLoading && <Loader />}
     {selectedPhoto && <ModalWindow 
       isOpen={isOpenModal}  

@@ -7,10 +7,6 @@
     justify-content: center;
 }
 
-.formik :hover, :focus, :active {
-    background-color: rgb(27, 27, 128);
-}
-
 .searchBar {
     margin: 4px auto;
     background-color: white;
@@ -23,7 +19,7 @@
 }
 
 .btn {
-    /* background-color: white; */
+    background-color: white;
     outline: none;
     border: none;
     color: black;
@@ -36,7 +32,6 @@
 }
 
 .input {
-    background-color: white;
     border-color: white;
     height: 100%;
     font-size: 18px;
