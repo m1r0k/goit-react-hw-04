@@ -1,86 +1,90 @@
 import { useState, useEffect } from 'react';
-import css from './App.module.css';
-import PhotoList from './ImageGallery/PhotoList';
 import { fetchPhotos } from '../photos-api';
+import PhotoList from './ImageGallery/PhotoList';
 import SearchBar from './SearchBar/SearchBar';
-import ErrorMessage from './ErrorMessage/ErrorMessage';
-import { Toaster } from 'react-hot-toast';
 import Loader from './Loader/Loader';
+import ErrorMessage from './ErrorMessage/ErrorMessage';
 import ModalWindow from './ImageModal/ModalWindow';
-import ReactModal from 'react-modal';
+import LoadMoreBtn from './LoadMoreBtn/LoadMoreBtn';
 
-ReactModal.setAppElement('#root');
-
-export default function App () {
-  const [searchQuery, setSearchQuery] = useState('');
+export default function App() {
+  const [query, setQuery] = useState('');
   const [photos, setPhotos] = useState([]);
-  const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [isError, setIsError] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [selectedPhoto, setSelectedPhoto] = useState({});
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  // const [showBtn, setShowBtn] = useState(false);
-
-  useEffect(() =>{
-    if(searchQuery === '') {
-      return;
-    }
-
-    async function getData() {
+  useEffect(() => {
+    const getPhotos = async () => {
       try {
         setIsLoading(true);
-        setError(false);
-        const data = await fetchPhotos(searchQuery, page);
-        // setShowBtn(total_pages && total_pages !== page);
+        const { results, total_pages } = await fetchPhotos({ query, page });
 
-        setPhotos((prewPhotos) => {
-          return page === 1 ? data : [...prewPhotos, ...data];
-        });
+        if (!results.length) {
+          setIsEmpty(true);
+          return;
+        }
+
+        setPhotos(prevPhotos => [...prevPhotos, ...results]);
+        setIsVisible(page < total_pages);
       } catch (error) {
-        setError(true);
+        setIsError(true);
       } finally {
         setIsLoading(false);
       }
-    }
-    getData()
-  }, [page, searchQuery]);
+    };
+    getPhotos();
+  }, [query, page]);
 
-  const handleSearch = async (newQuery) => {
-    setSearchQuery(newQuery);
-    setPage(1);
+  const handleSearch = value => {
+    if (value === query) return;
     setPhotos([]);
+    setPage(1);
+    setIsError(false);
+    setQuery(value);
+    setIsEmpty(false);
+    setIsVisible(false);
   };
 
   const handleLoadMore = () => {
-    setPage(page + 1);
+    setPage(prevPage => prevPage + 1);
   };
 
-  const handlePhotoClick = (itemUrl) => {
-    setSelectedPhoto(itemUrl);
+  const openModal = values => {
+    setSelectedPhoto(values);
     setIsOpenModal(true);
   };
 
-  const onCloseModal = () => {
-    setSelectedPhoto(null);
+  const closeModal = () => {
+    setSelectedPhoto({});
     setIsOpenModal(false);
   };
 
   return (
-  <div className={css.container}>
-    <SearchBar onSearch={handleSearch} />
-    {error && <ErrorMessage message={'Oops! Error! Reload!'} />}
-    {photos.length > 0 && <PhotoList items={photos} onPhotoClick={handlePhotoClick} />}
-    {photos.length > 0 && !isLoading && 
-    (/*showBtn && */<button onClick={handleLoadMore}>Load more</button>)}
-    {/* {photos.length === 0 && <ErrorMessage message={'Nothing found! Try another query...'} />} */}
-
-    {isLoading && <Loader />}
-    {selectedPhoto && <ModalWindow 
-      isOpen={isOpenModal}  
-      itemUrl={selectedPhoto}
-      onClose={onCloseModal} />}
-    <Toaster position='top-right'/>
-  </div>
+    <div>
+      <SearchBar onSubmit={handleSearch} />
+      {isError && <ErrorMessage message={'Oops! Error! Reload page!'} />}
+      {photos.length !== 0 && (
+        <PhotoList images={photos} openModal={openModal} />
+      )}
+      {isEmpty && query && (
+        <ErrorMessage>Nothing found! Try another query...</ErrorMessage>
+      )}
+      {isVisible && (
+        <LoadMoreBtn onClick={handleLoadMore} disabled={isLoading}>
+          {isLoading ? 'Loading' : 'Load more'}
+        </LoadMoreBtn>
+      )}
+      {isLoading && <Loader />}
+      <ModalWindow
+        modalOpen={isOpenModal}
+        modal={selectedPhoto}
+        closeModal={closeModal}
+      />
+    </div>
   );
 }

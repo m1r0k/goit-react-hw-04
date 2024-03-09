@@ -1,9 +1,9 @@
 import css from './LoadMoreBtn.module.css';
 
-export default function LoadMoreBtn ({ onLoadMore }) {
+export default function LoadMoreBtn({ onClick, children, disabled }) {
   return (
-    <button className={css.button} onClick={onLoadMore}>
-      Load more
+    <button className={css.button} onClick={onClick} disabled={disabled}>
+      {children}
     </button>
   );
-};
+}

@@ -1,17 +1,14 @@
-import css from "./PhotoList.module.css";
-import PhotoCard from "./ImageCard/PhotoCard";
+import css from './PhotoList.module.css';
+import PhotoCard from './ImageCard/PhotoCard';
 
-export default function PhotoList ({ items, onPhotoClick }){
-
+export default function PhotoList({ photos, openModal }) {
   return (
     <ul className={css.photoList}>
-      {items.map((item) => (
-        <li key={item.id} >
-          <PhotoCard src={item.urls.small} 
-            alt={item.alt_description} 
-            onClick={() => onPhotoClick(item.urls.regular)}/>
+      {photos.map(photo => (
+        <li key={photo.id}>
+          <PhotoCard photo={photo} openModal={openModal} />
         </li>
       ))}
     </ul>
   );
-};
+}
