@@ -9,7 +9,7 @@ export default function PhotoCard({
       <img
         src={urls.small}
         alt={alt_description}
-        onClick={() => openModal({ alt_description, imgUrl: urls.regular })}
+        onClick={() => openModal({ alt_description, photoUrl: urls.regular })}
       />
     </div>
   );

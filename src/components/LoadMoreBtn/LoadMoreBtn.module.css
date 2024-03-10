@@ -1,0 +1,21 @@
+.loaderBtn {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+}
+
+.button {
+  background-color: rgb(27, 27, 128);
+  outline: none;
+  width: 160px;
+  height: 48px;
+  border: 1px solid rgb(27, 27, 128);
+  font-weight: 500;
+  font-size: 24px;
+  transition: 0.3s;
+}
+
+.button:hover {
+  background-color: rgb(38, 38, 177);
+  color: white;
+}
