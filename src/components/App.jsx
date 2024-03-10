@@ -69,7 +69,7 @@ export default function App() {
       <SearchBar onSubmit={handleSearch} />
       {isError && <ErrorMessage message={'Oops! Error! Reload page!'} />}
       {photos.length !== 0 && (
-        <PhotoList images={photos} openModal={openModal} />
+        <PhotoList photos={photos} openModal={openModal} />
       )}
       {isEmpty && query && (
         <ErrorMessage>Nothing found! Try another query...</ErrorMessage>
@@ -81,7 +81,7 @@ export default function App() {
       )}
       {isLoading && <Loader />}
       <ModalWindow
-        modalOpen={isOpenModal}
+        isOpen={isOpenModal}
         modal={selectedPhoto}
         closeModal={closeModal}
       />

@@ -18,21 +18,18 @@ const customStyles = {
 
 export default function ModalWindow({
   modal: { photoUrl, alt_description },
-  openModal,
+  isOpen,
   closeModal,
 }) {
   return (
-    <div className={css.modalOverlay}>
-      <ReactModal
-        className={css.modal}
-        openModal={openModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-      >
-        <div>
-          <img src={photoUrl} alt={alt_description} />
-        </div>
-      </ReactModal>
-    </div>
+    <ReactModal
+      isOpen={isOpen}
+      onRequestClose={closeModal}
+      style={customStyles}
+    >
+      <div className={css.modal}>
+        <img src={photoUrl} alt={alt_description} className={css.modalImg} />
+      </div>
+    </ReactModal>
   );
 }
