@@ -20,7 +20,7 @@ export default function App() {
 
   useEffect(() => {
     const getPhotos = async () => {
-      if (!query === '') return;
+      if (query === '') return;
       try {
         setIsLoading(true);
         const { results, total_pages } = await fetchPhotos({ query, page });
